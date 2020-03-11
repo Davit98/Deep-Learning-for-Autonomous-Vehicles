@@ -56,11 +56,18 @@ def predict_usingSoftmax(X):
     # - Do the operation required to get the predictions                    #
     # - Return predictions in a numpy array                                 #
     #########################################################################
-    pass
+    WEIGHTS_PATH = 'Softmax/softmax_weights.pkl'
+    with open(WEIGHTS_PATH, 'rb') as f:
+        weights = pickle.load(f)
+
+    model = Softmax()
+    model.W = weights.copy()
+
+    y_pred = model.predict(X_val)
     #########################################################################
     #                       END OF YOUR CODE                                #
     #########################################################################
-    return None  # y_pred
+    return y_pred  # y_pred
 
 def main(filename, group_number):
     X, Y = du.load_CIFAR_batch(filename)
