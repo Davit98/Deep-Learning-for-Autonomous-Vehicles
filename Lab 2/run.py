@@ -58,12 +58,12 @@ def predict_usingSoftmax(X):
     #########################################################################
     WEIGHTS_PATH = 'Softmax/softmax_weights.pkl'
     with open(WEIGHTS_PATH, 'rb') as f:
-        weights = pickle.load(f)
+        weights = du.load_pickle(f)
 
     model = Softmax()
     model.W = weights.copy()
 
-    y_pred = model.predict(X_val)
+    y_pred = model.predict(X)
     #########################################################################
     #                       END OF YOUR CODE                                #
     #########################################################################
