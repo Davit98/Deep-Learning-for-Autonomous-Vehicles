@@ -25,11 +25,9 @@ def predict_usingPytorch(X):
 
     # - Load your saved model
     # Create model
-    n_feature = 32 * 32 * 3
-    n_hidden = 300
+    n_input = 32 * 32 * 3
     n_classes = 10
-    n_hidden_layers = 3
-    net = Net(n_feature=n_feature, n_hidden=n_hidden, n_output=n_classes, n_hidden_layers=n_hidden_layers)
+    net = Net(n_input=n_input, n_output=n_classes)
 
     # Load model weights
     path_model = "Pytorch/model.ckpt"
@@ -67,14 +65,14 @@ def predict_usingSoftmax(X):
     #########################################################################
     #                       END OF YOUR CODE                                #
     #########################################################################
-    return y_pred  # y_pred
+    return y_pred
+
 
 def main(filename, group_number):
     X, Y = du.load_CIFAR_batch(filename)
     X = np.reshape(X, (X.shape[0], -1))
     mean_image = np.mean(X, axis=0)
-    print("Mean", mean_image)
-    # X -= mean_image
+    X -= mean_image
     prediction_pytorch = predict_usingPytorch(X)
     X = np.hstack([X, np.ones((X.shape[0], 1))])
     prediction_softmax = predict_usingSoftmax(X)

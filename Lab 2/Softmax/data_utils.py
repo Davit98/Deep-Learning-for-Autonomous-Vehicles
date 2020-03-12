@@ -1,7 +1,7 @@
 from six.moves import cPickle as pickle
 import numpy as np
 import os
-from scipy.misc import imread
+# from scipy.misc import imread
 import platform
 from torchvision import datasets
 
