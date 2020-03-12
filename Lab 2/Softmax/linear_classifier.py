@@ -1,7 +1,9 @@
 import numpy as np
 
-from .softmax import *
-
+try:
+    from .softmax import *
+except:
+    from softmax import *
 
 class LinearClassifier(object):
 
