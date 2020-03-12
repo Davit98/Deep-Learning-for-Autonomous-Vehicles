@@ -32,7 +32,7 @@ def predict_usingPytorch(X):
     # Load model weights
     path_model = "Pytorch/model.ckpt"
     checkpoint = torch.load(path_model)
-    print(net.load_state_dict(checkpoint))
+    net.load_state_dict(checkpoint)
 
     # - Do the operation required to get the predictions
     images = torch.tensor(X, dtype=torch.float32)
