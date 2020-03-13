@@ -8,7 +8,6 @@ from Pytorch.network import Net
 
 
 #########################################################################
-# TODO:                                                                 #
 # This is used to input our test dataset to your model in order to      #
 # calculate your accuracy                                               #
 # Note: The input to the function is similar to the output of the method#
@@ -17,42 +16,28 @@ from Pytorch.network import Net
 
 def predict_usingPytorch(X):
     #########################################################################
-    # TODO:                                                                 #
-    # - Load your saved model                                               #
-    # - Do the operation required to get the predictions                    #
-    # - Return predictions in a numpy array                                 #
+    # - Loads saved model                                                   #
+    # - Does the operation required to get the predictions                  #
+    # - Returns predictions in a numpy array                                #
     #########################################################################
-
-    # - Load your saved model
-    # Create model
     n_input = 32 * 32 * 3
     n_classes = 10
     net = Net(n_input=n_input, n_output=n_classes)
-
-    # Load model weights
     path_model = "Pytorch/model.ckpt"
     checkpoint = torch.load(path_model)
     net.load_state_dict(checkpoint)
 
-    # - Do the operation required to get the predictions
-    images = torch.tensor(X, dtype=torch.float32)
-    predicted = net.predict(images)
-
-    # - Return predictions in a numpy array
+    predicted = net.predict(X)
     y_pred = np.array(predicted)
 
-    #########################################################################
-    #                       END OF YOUR CODE                                #
-    #########################################################################
     return y_pred
 
 
 def predict_usingSoftmax(X):
     #########################################################################
-    # TODO:                                                                 #
-    # - Load your saved model                                               #
-    # - Do the operation required to get the predictions                    #
-    # - Return predictions in a numpy array                                 #
+    # - Loads saved model                                                   #
+    # - Does the operation required to get the predictions                  #
+    # - Returns predictions in a numpy array                                #
     #########################################################################
     WEIGHTS_PATH = 'Softmax/softmax_weights.pkl'
     with open(WEIGHTS_PATH, 'rb') as f:
@@ -62,20 +47,27 @@ def predict_usingSoftmax(X):
     model.W = weights.copy()
 
     y_pred = model.predict(X)
-    #########################################################################
-    #                       END OF YOUR CODE                                #
-    #########################################################################
+
     return y_pred
 
 
 def main(filename, group_number):
     X, Y = du.load_CIFAR_batch(filename)
+
+    # Prepare data and do predictions with Neural Network
+    mean_pytorch = np.array([0.4914, 0.4822, 0.4465])
+    std_pytorch = np.array([0.2023, 0.1994, 0.2010])
+    X_pytorch = np.divide(np.subtract(X, mean_pytorch[np.newaxis, np.newaxis, :]),
+                          std_pytorch[np.newaxis, np.newaxis, :])
+    prediction_pytorch = predict_usingPytorch(torch.Tensor(np.moveaxis(X_pytorch, -1, 1)))
+
+    # Prepare data and do predictions with Softmax Network
     X = np.reshape(X, (X.shape[0], -1))
     mean_image = np.mean(X, axis=0)
     X -= mean_image
-    prediction_pytorch = predict_usingPytorch(X)
     X = np.hstack([X, np.ones((X.shape[0], 1))])
     prediction_softmax = predict_usingSoftmax(X)
+
     acc_softmax = sum(prediction_softmax == Y) / len(X)
     acc_pytorch = sum(prediction_pytorch == Y) / len(X)
     print("Group %s ... Softmax= %f ... Pytorch= %f" % (group_number, acc_softmax, acc_pytorch))
