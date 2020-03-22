@@ -130,6 +130,6 @@ dmypy.json
 
 Lab 2/data/*
 Lab 2/Pytorch/MNIST_data/*
-# Lab 2/Pytorch/model.ckpt
 Lab 2/.idea/*
 Lab 3/data/*
+Lab 3/.idea/*
