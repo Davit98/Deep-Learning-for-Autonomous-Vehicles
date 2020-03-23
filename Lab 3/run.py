@@ -3,7 +3,7 @@ import data_utils as du
 import argparse
 import numpy as np
 import torch
-from Network import ConvNetBig, ConvNetSmall
+from network import ConvNetBig, ConvNetSmall
 
 
 #########################################################################
@@ -17,13 +17,15 @@ from Network import ConvNetBig, ConvNetSmall
 def predict_usingCNN(X):
     n_channels = 3
     n_classes = 10
-    net = ConvNetSmall(n_input_channels=n_channels, n_output=n_classes)
+    net = ConvNetBig(n_input_channels=n_channels, n_output=n_classes)
     path_model = "model.ckpt"
     checkpoint = torch.load(path_model)
     net.load_state_dict(checkpoint)
 
     X = torch.tensor(X, dtype=torch.float32)
+
     with torch.no_grad():
+        # TODO: Do with batches
         predicted = net.predict(X)
     y_pred = np.array(predicted)
     return y_pred
@@ -41,8 +43,16 @@ def main(filename, group_number):
 
 
 if __name__ == "__main__":
+
+    # # For easy test while implementing
+    # group_n = 1
+    # for i in range(1, 6):
+    #     file = "data/cifar-10-batches-py/data_batch_" + str(i)
+    #     main(file, group_n)
+
     ap = argparse.ArgumentParser()
     ap.add_argument("-t", "--test", required=True, help="path to test file")
     ap.add_argument("-g", "--group", required=True, help="group number")
     args = vars(ap.parse_args())
+
     main(args["test"], args["group"])
