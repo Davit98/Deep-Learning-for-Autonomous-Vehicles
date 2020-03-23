@@ -19,9 +19,14 @@ def predict_usingCNN(X):
     n_classes = 10
     net = ConvNetBig(n_input_channels=n_channels, n_output=n_classes)
     path_model = "model.ckpt"
-    checkpoint = torch.load(path_model)
-    net.load_state_dict(checkpoint)
 
+    if torch.cuda.is_available():
+        checkpoint = torch.load(path_model)
+    else:
+        checkpoint = torch.load(path_model, map_location=torch.device('cpu'))
+
+    net.load_state_dict(checkpoint)
+    
     X = torch.tensor(X, dtype=torch.float32)
 
     with torch.no_grad():
