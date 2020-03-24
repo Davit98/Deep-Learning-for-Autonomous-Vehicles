@@ -37,7 +37,6 @@ class ConvNet(nn.Module):
         return x
 
     def predict(self, x):
-        self.eval()
         outputs = self.forward(x)
         _, predicted = max(F.softmax(outputs, dim=1).data, 1)
         return predicted

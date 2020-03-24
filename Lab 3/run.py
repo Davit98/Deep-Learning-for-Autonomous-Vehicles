@@ -31,6 +31,7 @@ def predict_usingCNN(X):
     X = torch.tensor(X, dtype=torch.float32)
 
     with torch.no_grad():
+        net.eval()
         predicted = net.predict(X)
     y_pred = np.array(predicted)
     return y_pred
